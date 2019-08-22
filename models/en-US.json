@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "api starter",
+      "invocationName": "jarvis",
       "types": [],
       "intents": [
         {
@@ -29,6 +29,14 @@
             "how many astronauts are in space",
             "how many astronauts are in space now",
             "how many astronauts are currently in space"
+          ]
+        },
+        {
+          "name": "GetQuoteDataIntent",
+          "slots": [],
+          "samples": [
+            "get the quote of the day",
+            "what is todays quote"
           ]
         }
       ]

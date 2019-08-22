@@ -37,8 +37,62 @@ const GetRemoteDataHandler = {
     return handlerInput.responseBuilder
       .speak(outputSpeech)
       .getResponse();
-
   },
+};
+
+const GetQuoteDataHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetQuoteDataIntent';
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'This is the default message.';
+
+    // await getRemoteData('http://quotes.stormconsultancy.co.uk/random.json')
+    //   .then((response) => {
+    //     const data = JSON.parse(response);
+    //     outputSpeech = `Here is the quote of the day. ${data.quote}`;
+    //   })
+    //   .catch((err) => {
+    //     //set an optional error message here
+    //     outputSpeech = 'something went wrong';
+    //   });
+
+    const axios = require('axios');
+    axios.get('http://quotes.stormconsultancy.co.uk/random.json').then(resp => {
+      const data = JSON.parse(resp.data);
+      outputSpeech = `Here is the quote of the day. ${data.quote}`;
+    });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+  },
+};
+
+const getRemoteData = function (url) {
+  return new Promise((resolve, reject) => {
+    const client = url.startsWith('https') ? require('https') : require('http');
+
+    const request = client.get(url, (response) => {
+      if (response.statusCode < 200 || response.statusCode > 299) {
+        reject(new Error('Failed with status code: ' + response.statusCode));
+      }
+      const body = [];
+      response.on('data', (chunk) => body.push(chunk));
+      response.on('end', () => resolve(body.join('')));
+    }); 
+
+    // const axios = require('axios');
+    // axios.get(url)
+    // .then(response => {
+    //   const body = [];
+    //   response.on('data', (chunk) => body.push(chunk));
+    //   response.on('end', () => resolve(body.join('')));      
+    // });
+    
+    request.on('error', (err) => reject(err))
+  })
 };
 
 const HelpIntentHandler = {
@@ -96,26 +150,12 @@ const ErrorHandler = {
   },
 };
 
-const getRemoteData = function (url) {
-  return new Promise((resolve, reject) => {
-    const client = url.startsWith('https') ? require('https') : require('http');
-    const request = client.get(url, (response) => {
-      if (response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error('Failed with status code: ' + response.statusCode));
-      }
-      const body = [];
-      response.on('data', (chunk) => body.push(chunk));
-      response.on('end', () => resolve(body.join('')));
-    });
-    request.on('error', (err) => reject(err))
-  })
-};
-
 const skillBuilder = Alexa.SkillBuilders.custom();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
     GetRemoteDataHandler,
+    GetQuoteDataHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler

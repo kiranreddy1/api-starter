@@ -1,20 +1,44 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "",
+      "skill_id": "amzn1.ask.skill.14c5d597-f201-4396-ade2-bf88d4864aa5",
       "was_cloned": false,
       "merge": {
         "manifest": {
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "ask-custom-dabblelab-api-starter-default"
+                "uri": "arn:aws:lambda:us-east-1:889475554317:function:ask-custom-api-starter-default"
               }
             }
           }
         }
       },
-      "in_skill_products": []
+      "in_skill_products": [],
+      "resources": {
+        "manifest": {
+          "eTag": "6dcf50d5b321e70047000a29bad93bca"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "7f3f63fe1bf4aba47830602e50eb10d3"
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:889475554317:function:ask-custom-api-starter-default",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "ask-custom-api-starter-default",
+            "handler": "index.handler",
+            "revisionId": "e3036340-6a9b-407d-8f94-41d17a6fbc26",
+            "runtime": "nodejs8.10"
+          }
+        ]
+      }
     }
   }
 }
